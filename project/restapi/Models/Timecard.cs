@@ -84,27 +84,6 @@ namespace restapi.Models
                         Relationship = ActionRelationship.RecordLine,
                         Reference = $"/timesheets/{Identity.Value}/lines"
                     });
-
-                    links.Add(new ActionLink() {
-                        Method = Method.Patch,
-                        Type = ContentTypes.TimesheetLine,
-                        Relationship = ActionRelationship.Update,
-                        Reference = $"/timesheets/{Identity.Value}/lines/"+"{lineId}"
-                    });
-
-                    Links.Add(new ActionLink() {
-                        Method = Method.Post,
-                        Type = ContentTypes.TimesheetLine,
-                        Relationship = ActionRelationship.Replace,
-                        Reference = $"/timesheets/{Identity.Value}/lines/"+"{lineId}"
-                    });
-
-                    links.Add(new ActionLink() {
-                        Method = Method.Delete,
-                        Type = ContentTypes.Timesheet,
-                        Relationship = ActionRelationship.Delete,
-                        Reference = $"/timesheets/{Identity.Value}"
-                    });
                 
                     break;
 
@@ -185,57 +164,6 @@ namespace restapi.Models
             Lines.Add(annotatedLine);
 
             return annotatedLine;
-        }
-        
-        public AnnotatedTimecardLine UpdateLine(TimecardLine timecardLine, string lineId)
-        {
-            int index = indexOf(lineId);
-
-            Lines[index].Week = timecardLine.Week;
-            Lines[index].Day = timecardLine.Day;
-            Lines[index].Year = timecardLine.Year;
-            Lines[index].Hours = timecardLine.Hours;
-            Lines[index].Project = timecardLine.Project;
-
-            return Lines[index];
-        }
-
-        public AnnotatedTimecardLine ReplaceLine(TimecardLine timecardLine, string lineId)
-        {
-            var annotatedLine = new AnnotatedTimecardLine(timecardLine);
-            int index = indexof(lineId);
-            Lines.RemoveAt(index);
-            Lines.Insert(index, new AnnotatedTimecardLine(timecardLine));
-            return annotatedLine;
-        }
-
-        public int indexOf(string lineId)
-        {
-            int itemIndex = -1;
-            Gui id = new Guid(lineId);
-
-            for(int i=0;i<Line.count;i++)
-            {
-                if(Line[i].UniqueIdentifier == id)
-                {
-                    itemIndex = i;
-                    return i;
-                }
-            }
-
-            return itemIndex;
-        }
-        public Boolean LineIdExist(string lineId)
-        {
-            for(int i=0;i<Lines.Count;i++)
-            {
-                if(Lines[i].UniqueIdentifier.toString() ==lineID)
-                {
-                    return true;                   
-                }
-            }
-
-            return false;
         }
     }
 }
